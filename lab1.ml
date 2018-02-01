@@ -198,7 +198,7 @@ Invalid_argument exception for instance.
 let rec max_list (lst : int list) : int =
   match lst with 
   | [a] -> a
-  | [] -> failwith "invalid"
+  | [] -> failwith "empty list"
   | head :: tail -> if head > max_list tail then head else max_list tail 
 
 (*......................................................................
@@ -213,8 +213,17 @@ length lists, to just pad the shorter list with, say, false values, so
 that, zip [1] [2; 3; 4] = [(1, 2); (false, 3); (false, 4)]?
 ......................................................................*)
 
-let zip (x : int list) (y : int list) : (int * int) list =
-  failwith "zip not implemented" ;;
+let rec length (lst : int list) : int =
+  match lst with
+  | [] -> 0
+  | head :: tail -> 1 + length tail ;;
+
+let rec zip (x : int list) (y : int list) : (int * int) list =
+  match x, y with
+  | [], [] -> []
+  | [], b -> failwith "different lengths"
+  | a, [] -> failwith "different lengths"
+  | head1 :: tail1, head2 :: tail2 -> (head1, head2) :: zip tail1 tail2;;
 
 (*.....................................................................
 Exercise 10: Recall the definition of the function prods from lecture
